@@ -1,0 +1,36 @@
+# Local Python environments and bytecode
+/.tools/
+/.venv/
+/venv/
+__pycache__/
+*.py[cod]
+
+# Reproducible outputs and local reports
+/build/
+/dist/
+/publish/
+/artifacts/
+/tests/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+/htmlcov/
+
+# Legacy backups and accidental local runtime data
+/runtime/
+/data/
+/cache/
+/logs/
+
+# Machine-specific settings and credentials
+/.idea/
+/.vscode/
+.env
+.env.*
+!.env.example
+!.env.sample
+Thumbs.db
+Desktop.ini
+.DS_Store

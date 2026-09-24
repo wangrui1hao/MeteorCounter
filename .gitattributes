@@ -1,0 +1,7 @@
+* text=auto
+*.py text eol=lf
+*.ps1 text eol=crlf
+*.md text eol=lf
+*.yml text eol=lf
+# Fixtures are hash-checked byte for byte, including JSON metadata.
+/tests/fixtures/** -text
