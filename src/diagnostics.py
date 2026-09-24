@@ -12,7 +12,7 @@ import cv2
 from maintenance import maintain_diagnostics
 
 
-VERSION = '2.6.10'
+VERSION = '2.6.11'
 
 
 class EvidenceError(OSError):

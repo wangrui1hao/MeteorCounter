@@ -23,7 +23,12 @@ class BannerDetector:
         self.templates = []
         for scale in (0.80, 0.90, 0.96, 1.0, 1.04, 1.10, 1.20):
             resized = cv2.resize(template, None, fx=scale, fy=scale)
-            self.templates.append((scale, feature(resized)))
+            self.templates.append((scale, self.lettering_feature(resized)))
+
+    @staticmethod
+    def lettering_feature(image):
+        # Normalize thin-stroke rasterization across native screen resolutions.
+        return cv2.GaussianBlur(feature(image), (0, 0), 1.)
 
     @staticmethod
     def region(width, height):
@@ -41,7 +46,7 @@ class BannerDetector:
             return Match(0., None)
         ratio = 1080. / full_height
         image = cv2.resize(frame, None, fx=ratio, fy=ratio, interpolation=cv2.INTER_AREA)
-        feat = feature(image)
+        feat = self.lettering_feature(image)
         return self.detect_prepared(image,feat,ratio,origin)
 
     def detect_prepared(self,image,feat,ratio,origin,integrals=None):
@@ -106,13 +111,13 @@ class EventDetector:
         if not frame.size or full_height<100:return SceneMatch(Match(0.,None),Match(0.,None))
         ratio=1080./full_height
         image=cv2.resize(frame,None,fx=ratio,fy=ratio,interpolation=cv2.INTER_AREA)
-        feat=feature(image)
+        feat=BannerDetector.lettering_feature(image)
         integrals=feature_integrals(feat)
         meteor=self.meteor.detect_prepared(image,feat,ratio,origin,integrals)
         shower=self.shower.detect_prepared(image,feat,ratio,origin,integrals)
         tip_score=0.
         if max(meteor.score,shower.score)<.8:
-            tip_feat=cv2.GaussianBlur(feat,(0,0),1.)
+            tip_feat=cv2.GaussianBlur(feature(image),(0,0),1.)
             tip_integrals=feature_integrals(tip_feat)
             for template in self.tips:
                 h,w=template.shape
